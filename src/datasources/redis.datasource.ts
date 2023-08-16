@@ -4,10 +4,7 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'redis',
   connector: 'kv-redis',
-  host: 'localhost',
-  port: 7000,
-  password: 'secret',
-  db: 1,
+  url: process.env.REDIS_URL,
 };
 
 // Observe application's life cycle to disconnect the datasource when

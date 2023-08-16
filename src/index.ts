@@ -1,4 +1,8 @@
-import {ApplicationConfig, SimpleCachingServiceApplication} from './application';
+require('dotenv').config();
+import {
+  ApplicationConfig,
+  SimpleCachingServiceApplication,
+} from './application';
 
 export * from './application';
 
