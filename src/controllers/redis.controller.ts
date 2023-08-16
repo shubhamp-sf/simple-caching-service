@@ -1,15 +1,10 @@
 import {AnyObject, repository} from '@loopback/repository';
-import {
-  get,
-  getModelSchemaRef,
-  param,
-  post,
-  requestBody,
-  response,
-} from '@loopback/rest';
+import {get, getModelSchemaRef, param, post, requestBody} from '@loopback/rest';
+import {STRATEGY, authenticate} from 'loopback4-authentication';
 import {Common} from '../models';
 import {CommonRepository} from '../repositories';
-import {STRATEGY, authenticate} from 'loopback4-authentication';
+
+export const OPERATION_SECURITY_SPEC = [{HTTPBearer: []}];
 
 export class RedisController {
   constructor(
@@ -19,9 +14,9 @@ export class RedisController {
 
   @authenticate(STRATEGY.BEARER)
   @get('/get/{key}', {
-    security: [{HTTPBearer: []}],
+    security: OPERATION_SECURITY_SPEC,
     responses: {
-      200: {
+      '200': {
         description: 'Returns value of the specified key',
         content: {
           'application/json': {
@@ -33,7 +28,6 @@ export class RedisController {
       },
     },
   })
-  @response(200)
   async get(
     @param.path.string('key')
     key: string,
@@ -45,9 +39,15 @@ export class RedisController {
   }
 
   @authenticate(STRATEGY.BEARER)
-  @post('/set/{key}')
-  @response(201)
-  async post(
+  @post('/set/{key}', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Saved',
+      },
+    },
+  })
+  async set(
     @param.path.string('key')
     key: string,
 
@@ -65,7 +65,10 @@ export class RedisController {
       },
     })
     value: Common,
-  ): Promise<void> {
+  ): Promise<{success: boolean}> {
     await this.redisRepository.set(key, value, options);
+    return {
+      success: true,
+    };
   }
 }
