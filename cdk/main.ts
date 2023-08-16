@@ -37,19 +37,18 @@ new LambdaStack(app, 'lambda', {
   // NOSONAR
   s3Bucket: process.env.S3_BUCKET!,
   codePath: __dirname,
-  handler: 'lambda.handler',
-  runtime: 'nodejs16.x',
+  runtime: 'nodejs18.x',
   layerPath: resolve(__dirname, '../layers'),
   vpcConfig: {
     securityGroupIds: getSecurityGroup(),
     subnetIds: getSubnetIds(),
   },
-  memorySize: 256,
-  timeout: 30,
+  memorySize: 512,
+  timeout: 59,
   envVars: {
     REDIS_URL: process.env.REDIS_URL || '',
     JWT_SECRET: process.env.JWT_SECRET || '',
-    JWT_ISSUER: 'sourcefuse',
+    JWT_ISSUER: process.env.JWT_ISSUER || 'sourcefuse',
   },
   customDomainName: {
     domainName: process.env.DOMAIN_NAME || '',
