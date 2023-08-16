@@ -1,5 +1,3 @@
-// Uncomment these imports to begin using these cool features!
-
 import {AnyObject, repository} from '@loopback/repository';
 import {
   get,
@@ -11,8 +9,7 @@ import {
 } from '@loopback/rest';
 import {Common} from '../models';
 import {CommonRepository} from '../repositories';
-
-// import {inject} from '@loopback/core';
+import {STRATEGY, authenticate} from 'loopback4-authentication';
 
 export class RedisController {
   constructor(
@@ -20,6 +17,7 @@ export class RedisController {
     public redisRepository: CommonRepository,
   ) {}
 
+  @authenticate(STRATEGY.BEARER)
   @get('/get/{key}')
   @response(200)
   async get(
@@ -28,10 +26,11 @@ export class RedisController {
     @param.query.object('options')
     options: AnyObject,
   ): Promise<Common> {
-    const getResponse = await this.redisRepository.get(key);
+    const getResponse = await this.redisRepository.get(key, options);
     return getResponse;
   }
 
+  @authenticate(STRATEGY.BEARER)
   @post('/set/{key}')
   @response(201)
   async post(
