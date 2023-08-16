@@ -18,7 +18,21 @@ export class RedisController {
   ) {}
 
   @authenticate(STRATEGY.BEARER)
-  @get('/get/{key}')
+  @get('/get/{key}', {
+    security: [{HTTPBearer: []}],
+    responses: {
+      200: {
+        description: 'Returns value of the specified key',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+      },
+    },
+  })
   @response(200)
   async get(
     @param.path.string('key')
