@@ -1,5 +1,12 @@
 import {AnyObject, repository} from '@loopback/repository';
-import {get, getModelSchemaRef, param, post, requestBody} from '@loopback/rest';
+import {
+  del,
+  get,
+  getModelSchemaRef,
+  param,
+  post,
+  requestBody,
+} from '@loopback/rest';
 import {STRATEGY, authenticate} from 'loopback4-authentication';
 import {Common} from '../models';
 import {CommonRepository} from '../repositories';
@@ -67,6 +74,41 @@ export class RedisController {
     value: Common,
   ): Promise<{success: boolean}> {
     await this.redisRepository.set(key, value, options);
+    return {
+      success: true,
+    };
+  }
+
+  @authenticate(STRATEGY.BEARER)
+  @del('/flush/{key}', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Deleted',
+      },
+    },
+  })
+  async flush(
+    @param.path.string('key')
+    key: string,
+  ): Promise<{success: boolean}> {
+    await this.redisRepository.delete(key);
+    return {
+      success: true,
+    };
+  }
+
+  @authenticate(STRATEGY.BEARER)
+  @del('/flushall', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Deleted',
+      },
+    },
+  })
+  async flushAll(): Promise<{success: boolean}> {
+    await this.redisRepository.deleteAll();
     return {
       success: true,
     };
