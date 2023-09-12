@@ -8,6 +8,7 @@ import {
   post,
   requestBody,
 } from '@loopback/rest';
+import {STRATEGY, authenticate} from 'loopback4-authentication';
 import {Common} from '../models';
 import {CommonRepository} from '../repositories';
 import {RedisService} from '../services/redis.service';
@@ -21,7 +22,7 @@ export class RedisController {
     @inject('services.RedisService') private redisService: RedisService,
   ) { }
 
-  //@authenticate(STRATEGY.BEARER)
+  @authenticate(STRATEGY.BEARER)
   @get('/get/{key}', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -51,7 +52,7 @@ export class RedisController {
     return JSON.parse(getResponse + '');
   }
 
-  //@authenticate(STRATEGY.BEARER)
+  @authenticate(STRATEGY.BEARER)
   @post('/set/{key}', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -91,7 +92,7 @@ export class RedisController {
     };
   }
 
-  //@authenticate(STRATEGY.BEARER)
+  @authenticate(STRATEGY.BEARER)
   @del('/flush/{key}', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -114,7 +115,7 @@ export class RedisController {
     };
   }
 
-  //@authenticate(STRATEGY.BEARER)
+  @authenticate(STRATEGY.BEARER)
   @del('/flushall', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
