@@ -50,7 +50,7 @@
   ],
   "dependencies": {
     "@loopback/boot": "^6.0.0",
-    "@loopback/core": "^5.0.0",
+    "@loopback/core": "^5.1.2",
     "@loopback/repository": "^6.1.1",
     "@loopback/rest": "^13.0.0",
     "@loopback/rest-explorer": "^6.0.0",
@@ -59,12 +59,13 @@
     "@vendia/serverless-express": "^4.10.1",
     "dotenv": "^16.3.1",
     "dotenv-extended": "^2.9.0",
+    "ioredis": "^5.3.2",
     "loopback-connector-kv-redis": "^3.0.3",
     "loopback4-authentication": "^9.0.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
-    "@loopback/build": "^10.0.0",
+    "@loopback/build": "^10.1.2",
     "@loopback/eslint-config": "^14.0.0",
     "@loopback/testlab": "^6.0.0",
     "@types/i18n": "^0.13.6",
