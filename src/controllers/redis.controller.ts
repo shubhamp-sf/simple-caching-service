@@ -20,7 +20,7 @@ export class RedisController {
     @repository(CommonRepository)
     public redisRepository: CommonRepository,
     @inject('services.RedisService') private redisService: RedisService,
-  ) { }
+  ) {}
 
   @authenticate(STRATEGY.BEARER)
   @get('/get/{key}', {
@@ -41,12 +41,15 @@ export class RedisController {
   async get(
     @param.path.string('key')
     key: string,
+    @param.query.string('dataSource') dataSource: string,
     @param.query.object('options')
     options: AnyObject,
   ): Promise<Common> {
-    const getResponse = await this.redisService.executeRedisCommand('GET', [
-      key
-    ]);
+    const getResponse = await this.redisService.executeRedisCommand(
+      'GET',
+      [key],
+      dataSource,
+    );
 
     //const getResponse = await this.redisRepository.get(key, options);
     return JSON.parse(getResponse + '');
@@ -64,7 +67,7 @@ export class RedisController {
   async set(
     @param.path.string('key')
     key: string,
-
+    @param.query.string('dataSource') dataSource: string,
     @param.query.object('options')
     options: AnyObject,
 
@@ -80,12 +83,11 @@ export class RedisController {
     })
     value: Common,
   ): Promise<{success: boolean}> {
-    await this.redisService.executeRedisCommand('SET', [
-      key,
-      JSON.stringify(value),
-      'PX',
-      86400000,
-    ]);
+    await this.redisService.executeRedisCommand(
+      'SET',
+      [key, JSON.stringify(value), 'PX', 86400000],
+      dataSource,
+    );
     //await this.redisRepository.set(key, value, options);
     return {
       success: true,
@@ -104,11 +106,9 @@ export class RedisController {
   async flush(
     @param.path.string('key')
     key: string,
+    @param.query.string('dataSource') dataSource: string,
   ): Promise<{success: boolean}> {
-
-    await this.redisService.executeRedisCommand('DEL', [
-      key
-    ]);
+    await this.redisService.executeRedisCommand('DEL', [key], dataSource);
     //await this.redisRepository.delete(key);
     return {
       success: true,
@@ -124,10 +124,10 @@ export class RedisController {
       },
     },
   })
-  async flushAll(): Promise<{success: boolean}> {
-    await this.redisService.executeRedisCommand('flushdb', [
-    ]);
-    //await this.redisRepository.deleteAll();
+  async flushAll(
+    @param.query.string('dataSource') dataSource: string,
+  ): Promise<{success: boolean}> {
+    await this.redisService.executeRedisCommand('flushdb', [], dataSource);
     return {
       success: true,
     };
