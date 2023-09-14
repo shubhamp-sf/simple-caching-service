@@ -46,7 +46,10 @@ new LambdaStack(app, 'lambda', {
   memorySize: 512,
   timeout: 59,
   envVars: {
-    REDIS_URL: process.env.REDIS_URL || '',
+    REDIS_URL_MANUFACTURER: process.env.REDIS_URL_MANUFACTURER || '',
+    REDIS_URL_PREAPPROVAL: process.env.REDIS_URL_PREAPPROVAL || '',
+    REDIS_URL_RETAILER: process.env.REDIS_URL_RETAILER || '',
+    REDIS_URL_PREMIUM: process.env.REDIS_URL_PREMIUM || '',
     JWT_SECRET: process.env.JWT_SECRET || '',
     JWT_ISSUER: process.env.JWT_ISSUER || 'sourcefuse',
   },
